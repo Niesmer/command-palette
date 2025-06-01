@@ -1,4 +1,8 @@
-use tauri::{AppHandle, Manager};
+use tauri::{
+    menu::{Menu, MenuItem},
+    tray::TrayIconBuilder,
+    AppHandle, Manager,
+};
 
 fn open_or_close_window(app: AppHandle) {
     let window = app.get_webview_window("window");
@@ -16,7 +20,7 @@ pub fn run() {
     tauri::Builder::default()
         .on_window_event(|window, event| match event {
             tauri::WindowEvent::CloseRequested { api, .. } => {
-                api.prevent_close(); //TODO : have a way to really quit the app via system tray
+                api.prevent_close();
                 let _ = window.hide();
             }
             _ => {}
@@ -24,6 +28,27 @@ pub fn run() {
         .setup(|app| {
             #[cfg(desktop)]
             {
+                let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+                let opts_i = MenuItem::with_id(app, "options", "Settings", true, None::<&str>)?;
+
+                let menu = Menu::with_items(app, &[&quit_i, &opts_i])?;
+                let _tray = TrayIconBuilder::new()
+                    .menu(&menu)
+                    .icon(app.default_window_icon().unwrap().clone())
+                    .on_menu_event(|app, event| match event.id.as_ref() {
+                        "quit" => {
+                            app.exit(0);
+                        }
+                        "options" => {
+                            //TODO : Add options window
+                        }
+                        _ => {
+                            println!("Not handled")
+                        }
+                    })
+                    .show_menu_on_left_click(false)
+                    .build(app)?;
+
                 use tauri_plugin_global_shortcut::{
                     Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState,
                 };
