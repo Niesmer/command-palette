@@ -1,27 +1,7 @@
 use tauri::{AppHandle, Manager};
 
-fn create_window(app: AppHandle) {
-    let _ = std::thread::spawn(move || {
-        let window = tauri::WebviewWindowBuilder::new(
-            &app,
-            "window",
-            tauri::WebviewUrl::App("index.html".into()),
-        )
-        .build()
-        .unwrap();
-        return window;
-    })
-    .join()
-    .unwrap()
-    .set_focus();
-}
-
 fn open_or_close_window(app: AppHandle) {
     let window = app.get_webview_window("window");
-    if window.is_none() {
-        println!("No window found trying to create one");
-        create_window(app);
-    } else {
         let unwrapped_window = window.unwrap();
         if unwrapped_window.is_visible().ok().unwrap() {
             let _ = unwrapped_window.hide();
@@ -30,7 +10,6 @@ fn open_or_close_window(app: AppHandle) {
             let _ = unwrapped_window.set_focus();
         }
     }
-}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -58,7 +37,6 @@ pub fn run() {
                         })
                         .build(),
                 )?;
-
                 app.global_shortcut().register(ctrl_shift_space)?;
             }
             Ok(())

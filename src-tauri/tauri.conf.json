@@ -10,5 +10,18 @@
     "frontendDist": "../dist"
   },
   "app": {
+    "windows": [
+      {
+        "visible": false,
+        "label": "window",
+        "resizable": false,
+        "fullscreen": true,
+        "focus": false,
+        "decorations": false,
+        "closable": false,
+        "alwaysOnTop": true,
+        "transparent": true
+      }
+    ]
   }
 }
