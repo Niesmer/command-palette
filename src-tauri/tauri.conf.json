@@ -19,7 +19,6 @@
         "focus": false,
         "decorations": false,
         "closable": false,
-        "alwaysOnTop": true,
         "transparent": true
       }
     ]
