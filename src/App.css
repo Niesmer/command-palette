@@ -1,1 +1,11 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+@custom-variant has-active {
+    &:has(:active), &:has(.active){
+        @slot
+    }
+}
+
+.pressed {
+    background-color: brown;
+}
