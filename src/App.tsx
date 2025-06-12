@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CommandList from "./components/CommandList";
-import useArrows from "react-use-arrows";
 import { useSearchStore } from "./store";
+import useArrows from "./useArrows";
 
 function App() {
   const searchValue = useSearchStore((s) => s.search);
