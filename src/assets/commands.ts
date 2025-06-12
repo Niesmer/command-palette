@@ -5,7 +5,7 @@ export function generate_function_from_command(command: Command) {
 }
 
 export function generate_commands_from_string(value: string) {
-    return COMMANDS.filter((command)=>command.label.toLowerCase().match(new RegExp(value.toLowerCase(), "g" )))
+    return COMMANDS.filter((command)=> (command.label.toLowerCase().match(new RegExp(value.toLowerCase(), "g" )) && command.label !== value))
 }
 
 export type Command = {
