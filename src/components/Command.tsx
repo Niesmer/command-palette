@@ -12,23 +12,32 @@ const Command = ({ command }: CommandProps) => {
   const setSearch = useSearchStore((s) => s.setSearch);
   const setSuggestion = useSearchStore((s) => s.setSuggestion);
 
+  const confirm = () => {
+    setSearch(`/${command.label}`);
+    setSuggestion("");
+    setPressed(false);
+  }
+
   return (
     <button
       onFocus={(e) => setSuggestion(search + command.label.slice(search.length-1))}
-      onClick={() => {
-        setSearch(`/${command.label}`);
-        setSuggestion("");
-      }}
+
+      onClick={() => confirm()}
+
       onKeyDown={(e) => {
-        if (e.key === "Enter") setPressed(true);
+        if (e.key === "Enter") {
+          e.preventDefault();
+          setPressed(true);
+        } 
         if (e.key === "Tab") {
           e.preventDefault();
-          setSearch(`/${command.label}`);
-          setSuggestion("");
+          confirm();
         }
       }}
       onKeyUp={(e) => {
-        if (e.key === "Enter") setPressed(false);
+        if (e.key === "Enter" && pressed) {
+          confirm();
+        };
       }}
       onBlur={() => {
         setSuggestion("");
